@@ -16,3 +16,6 @@ vendor/
 # Editor / IDE settings
 .vscode/
 .idea/
+
+# Devcontainer
+.devcontainer/

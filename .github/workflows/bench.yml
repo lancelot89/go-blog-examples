@@ -1,0 +1,19 @@
+name: Bench & Pprof
+on:
+  push:
+    branches: [ lab/03-concurrency-bench ]
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: go test ./bench-lab/... -bench . -cpuprofile cpu.out -memprofile mem.out -benchtime 5s
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pprof
+          path: |
+            cpu.out
+            mem.out

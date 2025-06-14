@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  bench:
+    build:
+      context: ./bench-lab/docker     # Dockerfile がある場所
+    working_dir: /app
+    volumes:
+      - .:/app                        # リポジトリをコンテナへ
+    command: bench-lab/scripts/run_bench.sh
+    ports:
+      - "8080:8080"                   # pprof Web UI

@@ -2,14 +2,25 @@ name: Lab04 gRPC CI
 on:
   push:
     branches: [ lab/04-grpc-otel ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Go をセットアップ
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24"
+          go-version: '1.24'
+
+      # ★ buf CLI をインストール（go install 一発）
+      - name: Install buf
+        run: |
+          go install github.com/bufbuild/buf/cmd/buf@latest
+          echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      # 生成 & 残りのビルドステップ
       - run: buf generate
       - run: go vet ./...
       - run: go test ./...

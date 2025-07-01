@@ -22,6 +22,6 @@ jobs:
 
       # 生成 & 残りのビルドステップ
       - name: Buf generate
-        run: buf generate -c grpc-otel-lab/buf.gen.yaml
+        run: buf generate -c grpc-otel-lab
       - run: go vet ./...
       - run: go test ./...

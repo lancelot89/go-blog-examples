@@ -1,10 +1,12 @@
-.PHONY: test tidy mock
+generate:
+	buf generate
 
-test:
-	go test ./... -v
+run-server:
+	go run grpc-otel-lab/cmd/server
 
-tidy:
+run-client:
+	go run grpc-otel-lab/cmd/client
+
+deps:
+	go get go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc@latest
 	go mod tidy
-
-mock:
-	mockgen -source=internal/domain/user.go -destination=mock/mock_user.go -package=mock

@@ -21,6 +21,7 @@ jobs:
           echo "$HOME/go/bin" >> $GITHUB_PATH
 
       # 生成 & 残りのビルドステップ
-      - run: buf generate
+      - name: Buf generate
+        run: buf generate -c grpc-otel-lab/buf.gen.yaml
       - run: go vet ./...
       - run: go test ./...

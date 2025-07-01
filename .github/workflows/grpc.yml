@@ -1,0 +1,15 @@
+name: Lab04 gRPC CI
+on:
+  push:
+    branches: [ lab/04-grpc-otel ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+      - run: buf generate
+      - run: go vet ./...
+      - run: go test ./...

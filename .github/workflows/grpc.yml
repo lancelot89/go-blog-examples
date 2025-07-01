@@ -1,28 +1,25 @@
-name: Lab04 gRPC CI
-on:
-  push:
-    branches: [ lab/04-grpc-otel ]
+steps:
+  - uses: actions/checkout@v4
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  # Go のセットアップ
+  - uses: actions/setup-go@v5
+    with:
+      go-version: '1.24'
 
-      # Go をセットアップ
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.24'
+  # buf + protoc plugins をインストール
+  - name: Install buf & protoc plugins
+    run: |
+      go install github.com/bufbuild/buf/cmd/buf@latest
+      go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      echo "$HOME/go/bin" >> $GITHUB_PATH
 
-      # ★ buf CLI をインストール（go install 一発）
-      - name: Install buf
-        run: |
-          go install github.com/bufbuild/buf/cmd/buf@latest
-          echo "$HOME/go/bin" >> $GITHUB_PATH
+  # buf generate（grpc-otel-lab ディレクトリで実行）
+  - name: Buf generate
+    run: |
+      cd grpc-otel-lab
+      buf generate
 
-      # 生成 & 残りのビルドステップ
-      - run: |
-          cd grpc-otel-lab
-          buf generate
-      - run: go vet ./...
-      - run: go test ./...
+  # 以降はビルド／テスト
+  - run: go vet ./...
+  - run: go test ./...

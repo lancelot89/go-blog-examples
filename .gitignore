@@ -1,3 +1,7 @@
+
+# Vendored dependencies
+grpc-gateway-k6-observability/vendor/
+
 # Go binaries & test artifacts
 *.exe
 *.dll

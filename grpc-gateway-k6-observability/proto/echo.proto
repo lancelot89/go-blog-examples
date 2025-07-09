@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package echo;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/izayo/go-blog-examples/grpc-gateway-k6-observability/proto/echo";
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo"
+      body: "*"
+    };
+  }
+}
+
+message EchoRequest {
+  string message = 1;
+}
+
+message EchoResponse {
+  string message = 1;
+}

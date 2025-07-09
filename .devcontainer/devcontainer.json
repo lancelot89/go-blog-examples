@@ -1,0 +1,15 @@
+{
+  "name": "Go Concurrency Lab",
+  "image": "mcr.microsoft.com/devcontainers/go:1.22",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "go.toolsManagement.autoUpdate": true
+      },
+      "extensions": [
+        "golang.Go"
+      ]
+    }
+  },
+  "forwardPorts": [8080]
+}

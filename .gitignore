@@ -1,21 +1,3 @@
-# Go binaries & test artifacts
-*.exe
-*.dll
-*.so
-*.dylib
-*.test
-*.out
 
-# Build output
-bin/
-coverage.out
-
-# Dependency directories (if vendored)
-vendor/
-
-# Editor / IDE settings
-.vscode/
-.idea/
-
-# Devcontainer
-.devcontainer/
+# Vendored dependencies
+grpc-gateway-k6-observability/vendor/

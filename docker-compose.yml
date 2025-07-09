@@ -1,12 +1,38 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  bench:
+  app:
     build:
-      context: ./bench-lab/docker     # Dockerfile がある場所
-    working_dir: /app
-    volumes:
-      - .:/app                        # リポジトリをコンテナへ
-    command: bench-lab/scripts/run_bench.sh
+      context: .
+      dockerfile: grpc-gateway-k6-observability/Dockerfile
     ports:
-      - "8080:8080"                   # pprof Web UI
+      - "50051:50051"
+      - "8080:8080"
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.80.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./grpc-gateway-k6-observability/telemetry/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    volumes:
+      - ./grpc-gateway-k6-observability/telemetry/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:9.5.3
+    volumes:
+      - ./grpc-gateway-k6-observability/telemetry/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grpc-gateway-k6-observability/telemetry/grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
